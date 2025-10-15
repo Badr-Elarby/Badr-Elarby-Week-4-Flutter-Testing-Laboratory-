@@ -18,26 +18,36 @@ class _UserRegistrationFormState extends State<UserRegistrationForm> {
   String _message = '';
 
   bool isValidEmail(String email) {
-    return email.contains('@');
+    final regex = RegExp(r'^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,}$');
+    return regex.hasMatch(email.trim());
   }
 
   bool isValidPassword(String password) {
-    return true;
+    final regex = RegExp(
+      r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$',
+    );
+    return regex.hasMatch(password);
   }
 
   Future<void> _submitForm() async {
-    setState(() {
-      _isLoading = true;
-      _message = '';
-    });
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+        _message = '';
+      });
 
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 2));
+      // Simulate API call
+      await Future.delayed(const Duration(seconds: 2));
 
-    setState(() {
-      _isLoading = false;
-      _message = 'Registration successful!';
-    });
+      setState(() {
+        _isLoading = false;
+        _message = 'Registration successful!';
+      });
+    } else {
+      setState(() {
+        _message = 'Please fix the errors in the form';
+      });
+    }
   }
 
   @override
@@ -97,7 +107,7 @@ class _UserRegistrationFormState extends State<UserRegistrationForm> {
                   return 'Please enter a password';
                 }
                 if (!isValidPassword(value)) {
-                  return 'Password is too weak';
+                  return 'Password must be at least 8 characters, including an uppercase letter, a lowercase letter, a number, and a special character';
                 }
                 return null;
               },
