@@ -3,18 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_testing_lab/widgets/user_registration_form.dart';
 
 void main() {
-  // التيستات اللي هتتحقق من الواجهة
   testWidgets('User Registration Form Widget Tests', (
     WidgetTester tester,
   ) async {
-    // بننشئ الـ Widget ونضيفه للاختبار
-    await tester.pumpWidget(const MaterialApp(home: UserRegistrationForm()));
+    // بننشئ الـ Widget مع Scaffold وMaterialApp
+    await tester.pumpWidget(
+      MaterialApp(home: Scaffold(body: UserRegistrationForm())),
+    );
 
     // 1. تحقق من رسالة الخطأ لـ email غير صحيح
     await tester.enterText(
       find.byType(TextFormField).at(1),
       'a@',
-    ); // الحقل الثاني (Email)
+    ); // Email field
     await tester.tap(find.text('Register'));
     await tester.pump();
 
@@ -24,7 +25,7 @@ void main() {
     await tester.enterText(
       find.byType(TextFormField).at(2),
       'weak',
-    ); // الحقل الثالث (Password)
+    ); // Password field
     await tester.tap(find.text('Register'));
     await tester.pump();
 
@@ -39,19 +40,19 @@ void main() {
     await tester.enterText(
       find.byType(TextFormField).at(0),
       'John Doe',
-    ); // الحقل الأول (Name)
+    ); // Name field
     await tester.enterText(
       find.byType(TextFormField).at(1),
       'test@domain.com',
-    ); // Email
+    ); // Email field
     await tester.enterText(
       find.byType(TextFormField).at(2),
       'Password123!',
-    ); // Password
+    ); // Password field
     await tester.enterText(
       find.byType(TextFormField).at(3),
       'Password123!',
-    ); // Confirm Password
+    ); // Confirm Password field
     await tester.tap(find.text('Register'));
     await tester.pumpAndSettle(
       const Duration(seconds: 2),
